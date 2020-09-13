@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Droogi mouse superhands</title>
+
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://unpkg.com/super-hands/dist/super-hands.min.js"></script>
+    <script src="https://unpkg.com/aframe-particleplayer-component/dist/aframe-particleplayer-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@^4.0.0/dist/aframe-event-set-component.min.js"></script>
+    <script src="components\scripts\snap.js"></script>
+    <script scr="components\scripts\trigger.js"></script>
+
+  </head>
+  <body>
+    <a-scene background color="#6a2f80" physics>
+      <a-assets>
+        <a-asset-item id="pyramid" src="builds\development\assets\models\pyramidblack.glb"></a-asset-item>
+        <a-asset-item id="rjtext" src="builds\development\assets\models\rjtext1.glb"></a-asset-item>
+        <a-asset-item id="guns" src="builds\development\assets\models\guns.glb"></a-asset-item>
+        <a-asset-item id="health" src="builds\development\assets\models\health.glb"></a-asset-item>
+        <a-asset-item id="particlesJson" src="builds\development\assets\video\fireworks.json"></a-asset-item>
+        <img id="1cube" src="builds\development\assets\images\1.jpg"></img>
+        <img id="2cube" src="builds\development\assets\images\2.jpg"></img>
+        <img id="ground" src="builds\development\assets\images\neonfloor512.png"></img>
+        <img id="particleTex" src="builds\development\assets\images\floor.png">
+
+
+        <a-mixin id="cube" geometry="primitive: box; width: 0.5; height: 0.5; depth: 0.5"
+                 hoverable grabbable stretchable draggable droppable
+                 shadow
+                 event-set__dragdrop="_event: drag-drop; geometry.radius: 0.25; geometry.primitive: sphere"
+                 event-set__hoveron="_event: hover-start; material.opacity: 0.7; transparent: true"
+                 event-set__hoveroff="_event: hover-end; material.opacity: 1; transparent: false"
+                 event-set__dragon="_event: dragover-start; material.wireframe: true"
+                 event-set__dragoff="_event: dragover-end; material.wireframe: false">
+        </a-mixin>
+        <a-mixin id="numero" geometry="primitive: box; width: 0.5; height: 0.5; depth: 0.5"
+                 hoverable grabbable stretchable draggable droppable
+                 shadow
+                 event-set__dragon="_event: dragover-start; scale: 2 2 2"
+                 event-set__dragoff="_event: dragover-end; scale: 1 1 1"></a-mixin>
+
+      </a-assets>
+      <!--   <a-entity camera wasd-controls look-controls position="0 1.6 0">
+     this is to add it to cursor but then it gets stuck <a-cursor color="#79e0db"
+                raycaster="objects: .cube, .numero"
+                static-body="shape: sphere; sphereRadius: 0.001"
+                super-hands="colliderEvent: raycaster-intersection;
+                             colliderEventProperty: els;
+                             colliderEndEvent:raycaster-intersection-cleared;
+                             colliderEndEventProperty: clearedEls;">
+        </a-cursor>
+        </a-entity>-->
+        <a-entity camera wasd-controls look-controls position="0 1.6 0"
+
+                  raycaster="objects: .cube, .numero, #guns, #lo, .bo, #mosphere, #rjtext, #health"  cursor="rayOrigin:mouse"
+                  static-body="shape: sphere; sphereRadius: 0.001"
+                  super-hands="colliderEvent: raycaster-intersection;
+                               colliderEventProperty: els;
+                               colliderEndEvent:raycaster-intersection-cleared;
+                               colliderEndEventProperty: clearedEls;">
+      </a-entity>
+      <a-box id="scaler" class="numero" position="-1.366 .482 3" material="src: #1cube"></a-box>
+      <a-entity class="numero" mixin="numero" position=".930 .252 3" material="src: #1cube"></a-entity>
+      <a-entity class="numero" mixin="numero" position="0 .252 4.142" material="src: #2cube"></a-entity>
+      <a-entity class="cube" mixin="cube" position="-0.9 1 -0.9" material="color: blue"></a-entity>
+      <a-entity class="cube" mixin="cube" position="-1 1.6 -1" material="color: blue"></a-entity>
+      <a-entity class="cube" mixin="cube" position="0.9 1 -0.9" material="color: green"></a-entity>
+      <a-entity class="cube" mixin="cube" position="1 1.6 -1" material="color: green"></a-entity>
+      <a-box trigger class="bo" material="color: #783021" position="3 .5 -.5" depth=".5" height=".75"
+             event-set__drag="_event: grab-start; _target: #lo; visible: true"></a-box>
+      <a-box id="selfie" snap class="bo" material="color: #6b7eff" position="3 .5 .5" clickable depth=".5" height=".5"
+              animation__scale="property: scale; to: 2 2 2; dur: 500; startEvents: mousedown"
+              animation__scaledown="property: scale; to: 1 1 1; dur: 500; startEvents: mouseup"></a-box>
+      <a-plane id="lo" material=" color: #ba2bed" visible="false" position="0 1 -.6" draggable droppable rotation="-90 0 0"></a-plane>
+      <a-entity id="pyr" gltf-model="#pyramid" position="-1.27 .153 -1.5"></a-entity>
+      <a-entity id="rjtext" grabbable draggable droppable gltf-model="#rjtext" position="-1.27 .153 -.5"
+                event-set__hoveron="_event: hover-start; position: -1.27 1 -.5"></a-entity>
+      <a-entity id="health" grabbable draggable droppable gltf-model="#health" position="-1.27 .153 -.5"
+                event-set__drag="_event: dragover-start; _target: #scaler; scale: 2 2 2"></a-entity>
+
+      <a-sphere trigger id="mosphere" color="#04ff0e" position="1 2.1 -1" radius=".2"
+                animation__scale="property: scale; to: 2 2 2; dur: 500; startEvents: mousedown"
+                animation__scaledown="property: scale; to: 1 1 1; dur: 500; startEvents: mouseup"></a-sphere>
+      <a-entity position="0 1 -5"
+                 trigger
+                 particleplayer="on: particleplayerstart; src: #particlesJson; img: #particleTex; dur: 4000; count: 50%; scale: 0.6; pscale: 2; interpolate: true; shader: standard; poolSize: 20"></a-entity>
+
+      <a-plane src="#ground" rotation="-90 0 0" static-body position="0 0 0" scale="10000 10000 1" repeat="5000 5000"></a-plane>
+    </a-scene>
+
+  </body>
+</html>

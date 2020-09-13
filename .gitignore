@@ -1,0 +1,5 @@
+node_modules
+.tmp
+builds/**images/*
+builds/**models/*
+builds/**video/*
