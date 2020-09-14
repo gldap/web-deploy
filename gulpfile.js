@@ -8,7 +8,8 @@ var jsSources =[
 ]
 
 gulp.task('js', function(){
-  gulp.src(jsSources)
+  gulp.src([  'components\scripts\snap.js',
+    'components\scripts\trigger.js'], {allowEmpty: true})
     .pipe(concat ('script.js'))
-    .pipe(gulp.dest('builds\development\js'))
+    .pipe(gulp.dest('builds/development/js'))
 });
